@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武汉大学精华一日游</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 10mm;
+                font-size: 12px;
+            }
+        }
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 1.4;
+            background-image: url('https://pic3.zhimg.com/v2-dc48f9f4c0c93ed241b6bbe26684a4d4_r.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .container {
+            max-width: 210mm;
+            padding: 10mm;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        /* 添加樱花装饰元素 */
+        .container::before,
+        .container::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-image: url('https://img.zcool.cn/community/014ab35e66a5f2a801216518613215.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 0;
+            opacity: 0.7;
+        }
+        .container::before {
+            top: -20px;
+            right: -20px;
+            transform: rotate(45deg);
+        }
+        .container::after {
+            bottom: -20px;
+            left: -20px;
+            transform: rotate(-45deg);
+        }
+        .cherry-decoration {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background-image: url('https://img.zcool.cn/community/01a5625e66a5f3a801216518e9ca88.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 0;
+            opacity: 0.6;
+        }
+        .cherry-1 {
+            top: 100px;
+            right: 50px;
+            transform: rotate(15deg);
+        }
+        .cherry-2 {
+            bottom: 200px;
+            left: 40px;
+            transform: rotate(-10deg);
+        }
+        .cherry-3 {
+            top: 250px;
+            right: 70px;
+            transform: rotate(20deg);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #0078d7;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .title {
+            color: #e91e63;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        .weather-box {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: right;
+            width: 200px;
+        }
+        .section-header {
+            background-color: #fff;
+            padding: 8px 15px;
+            margin: 15px 0 10px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .section-header i {
+            margin-right: 8px;
+            color: #ff9800;
+        }
+        .overview {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+        .overview-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        .dot.morning {
+            background-color: #ffb300;
+        }
+        .dot.noon {
+            background-color: #f44336;
+        }
+        .dot.afternoon {
+            background-color: #4caf50;
+        }
+        .dot.evening {
+            background-color: #2196f3;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .schedule-table th {
+            background-color: #2c98df;
+            color: white;
+            text-align: center;
+            padding: 8px;
+        }
+        .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+        }
+        .schedule-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .schedule-time {
+            white-space: nowrap;
+            text-align: center;
+        }
+        .schedule-icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            margin-right: 5px;
+            color: #7b1fa2;
+        }
+        .transportation {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .route {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .route::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ff9800;
+        }
+        .route-arrow {
+            color: #ff9800;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        .route-detail {
+            color: #666;
+            margin-left: 5px;
+        }
+        .two-column {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .column {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            padding: 10px;
+        }
+        .info-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .info-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .info-list i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #0078d7;
+        }
+        .practical-tips {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .tip-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .tip-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #ff9800;
+        }
+        .emergency {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .emergency-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .emergency-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #f44336;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background-color: #005a9e;
+        }
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 添加樱花装饰元素 -->
+        <div class="cherry-decoration cherry-1"></div>
+        <div class="cherry-decoration cherry-2"></div>
+        <div class="cherry-decoration cherry-3"></div>
+        
+        <div class="header">
+            <h1 class="title">武汉大学精华一日游</h1>
+            <div class="weather-box">
+                <div><i class="fas fa-cloud"></i> 天气: 多云</div>
+                <div>温度: 24°C/9°C</div>
+                <div>风向: 北风1-3级</div>
+            </div>
+        </div>
+        
+        <div>日期: 2025年4月5日（星期六）</div>
+        
+        <!-- 添加樱花宣传语 -->
+        <div style="text-align: center; margin: 15px 0; padding: 10px; background-color: rgba(255, 192, 203, 0.2); border-radius: 5px; border-left: 3px solid #e91e63;">
+            <p style="margin: 0; font-style: italic; color: #e91e63;">
+                <i class="fas fa-seedling" style="margin-right: 8px;"></i>
+                樱花烂漫时节，邀您共赏武大百年学府之美
+                <i class="fas fa-seedling" style="margin-left: 8px;"></i>
+            </p>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-cloud-sun"></i> 天气播报
+        </div>
+        <div class="two-column" style="margin-bottom: 15px;">
+            <div class="column" style="display: flex; align-items: center; justify-content: space-around; padding: 15px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 36px; color: #0078d7; margin-bottom: 5px;">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div style="font-weight: bold;">今日</div>
+                    <div>多云</div>
+                    <div><span style="color: #dc3545;">24°C</span> / <span style="color: #0d6efd;">9°C</span></div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; color: #777;">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div>北风</div>
+                    <div>1-3级</div>
+                </div>
+                <div style="border-left: 1px dashed #ddd; height: 80px; margin: 0 15px;"></div>
+                <div>
+                    <div style="margin-bottom: 8px;"><i class="fas fa-umbrella" style="color: #0078d7; margin-right: 5px;"></i> 降水概率: 10%</div>
+                    <div style="margin-bottom: 8px;"><i class="fas fa-sun" style="color: #ff9800; margin-right: 5px;"></i> 紫外线: 中等</div>
+                    <div><i class="fas fa-thermometer-half" style="color: #4caf50; margin-right: 5px;"></i> 体感温度: 22°C</div>
+                </div>
+            </div>
+            <div class="column">
+                <div style="margin-bottom: 10px; font-weight: bold;"><i class="fas fa-info-circle" style="color: #0078d7; margin-right: 5px;"></i> 天气提示</div>
+                <div style="line-height: 1.5; color: #555;">
+                    今日天气适宜游览武大校园，樱花季即将结束，仍有部分樱花可观赏。温度适宜，但紫外线较强，建议做好防晒。东湖一带下午可能有短时阵风，户外活动需注意安全。
+                </div>
+                <div style="margin-top: 10px;">
+                    <span class="badge bg-info me-2" style="padding: 5px 8px; margin-right: 5px;">携带外套</span>
+                    <span class="badge bg-warning me-2" style="padding: 5px 8px; margin-right: 5px;">防晒防护</span>
+                    <span class="badge bg-success" style="padding: 5px 8px;">适合游览</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-route"></i> 校园行程概览
+        </div>
+        <div class="overview">
+            <div class="overview-item">
+                <span class="dot morning"></span>
+                <span>上午: 老斋舍 — 樱花大道 — 樱顶</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot noon"></span>
+                <span>中午: 工学部食堂 — 品尝校园美食</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot afternoon"></span>
+                <span>下午: 珞珈山 — 水塔 — 万林艺术博物馆</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot evening"></span>
+                <span>晚上: 东湖夜景 — 环湖漫步</span>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-clock"></i> 详细时间表
+        </div>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th width="15%">时间</th>
+                    <th width="25%">活动</th>
+                    <th width="25%">地点</th>
+                    <th width="35%">详情</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-sun schedule-icon"></i> 05:30-07:00</td>
+                    <td>凌波门看日出</td>
+                    <td>武大凌波门</td>
+                    <td>
+                        门票: 免费(校园免费开放)<br>
+                        推荐: 东湖日出、晨光下的校园美景
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-university schedule-icon"></i> 07:30-09:30</td>
+                    <td>参观珞珈门与樱花大道</td>
+                    <td>珞珈门→樱花大道</td>
+                    <td>
+                        门票: 免费<br>
+                        推荐: 珞珈门地标建筑、樱花大道樱花摄影
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-mountain schedule-icon"></i> 09:30-11:30</td>
+                    <td>游览樱顶</td>
+                    <td>文理学部樱顶</td>
+                    <td>
+                        门票: 免费<br>
+                        推荐: 樱顶观景、文学院建筑群、樱花胜景
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-utensils schedule-icon"></i> 12:00-13:30</td>
+                    <td>午餐体验</td>
+                    <td>梅园CBD餐厅</td>
+                    <td>
+                        人均: 40-60元<br>
+                        推荐: 湖北特色小吃、创意校园美食
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-water schedule-icon"></i> 13:30-15:30</td>
+                    <td>珞珈山与老斋舍</td>
+                    <td>珞珈山山顶→老斋舍</td>
+                    <td>
+                        门票: 免费<br>
+                        推荐: 俯瞰校园全景、历史建筑欣赏
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-palette schedule-icon"></i> 15:30-17:30</td>
+                    <td>参观万林艺术博物馆</td>
+                    <td>文理学部西侧</td>
+                    <td>
+                        门票: 免费(需提前预约)<br>
+                        推荐: 建筑设计、艺术展览
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-moon schedule-icon"></i> 18:00-20:00</td>
+                    <td>东湖夜景</td>
+                    <td>东湖边→环湖路</td>
+                    <td>
+                        门票: 免费<br>
+                        推荐: 湖光山色、夜景拍摄、樱花月影
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="section-header">
+            <i class="fas fa-car"></i> 校内交通路线
+        </div>
+        <div class="transportation">
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 凌波门 <span class="route-arrow">→</span> 珞珈门
+                <span class="route-detail">1.5公里 | 约20分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 珞珈门 <span class="route-arrow">→</span> 樱花大道
+                <span class="route-detail">500米 | 约7分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 樱花大道 <span class="route-arrow">→</span> 樱顶
+                <span class="route-detail">800米 | 约12分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 樱顶 <span class="route-arrow">→</span> 梅园CBD
+                <span class="route-detail">1.5公里 | 约20分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 梅园CBD <span class="route-arrow">→</span> 珞珈山
+                <span class="route-detail">1公里 | 约15分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 珞珈山 <span class="route-arrow">→</span> 老斋舍
+                <span class="route-detail">1公里 | 约15分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 老斋舍 <span class="route-arrow">→</span> 万林艺术博物馆
+                <span class="route-detail">1.2公里 | 约18分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 万林艺博 <span class="route-arrow">→</span> 东湖
+                <span class="route-detail">1公里 | 约15分钟步行</span>
+            </div>
+            <div class="route" style="color: #666;">
+                <i class="fas fa-info-circle"></i> 交通方式: 武大校园面积大，建议穿舒适鞋子步行游览。校内也有校车，可在指定站点乘坐。早上看日出前往凌波门可乘坐出租车。
+            </div>
+        </div>
+        
+        <div class="two-column">
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-camera"></i> 摄影打卡点
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>樱花大道:</strong><br>
+                            武大标志性景点，春季樱花盛开<br>
+                            最佳拍摄角度: 樱花大道中央向两侧取景
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>珞珈门:</strong><br>
+                            武大标志性校门，经典建筑<br>
+                            最佳拍摄时间: 上午9-11点光线最佳
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>凌波门日出:</strong><br>
+                            可观赏东湖日出，晨光中的校园<br>
+                            最佳拍摄时间: 日出前15分钟到日出后30分钟
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-utensils"></i> 校园美食
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-hamburger"></i>
+                        <div>
+                            <strong>梅园CBD餐厅:</strong><br>
+                            特色小吃、创意料理<br>
+                            价格: 40-60元/人
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-coffee"></i>
+                        <div>
+                            <strong>珞珈山咖啡厅:</strong><br>
+                            特色咖啡、手工蛋糕<br>
+                            价格: 30-50元/人
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-cookie"></i>
+                        <div>
+                            <strong>樱顶甜品:</strong><br>
+                            樱花主题甜品、特色饮品<br>
+                            价格: 20-40元/人
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-exclamation-circle"></i> 实用提示
+        </div>
+        <div class="practical-tips">
+            <div class="tip-item">
+                <i class="fas fa-id-card"></i>
+                <div>校园参观需凭有效证件(身份证)在正门登记入校</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-walking"></i>
+                <div>武大校园地势起伏较大，建议穿着舒适的平底鞋</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-water"></i>
+                <div>校内直饮水点较多，可自带水杯随时补充饮水</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-camera"></i>
+                <div>樱花季节樱花大道人流量大，建议提前或错峰前往拍摄</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-clock"></i>
+                <div>清晨观看日出需提前到达凌波门，建议5:00左右出发</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-money-bill"></i>
+                <div>校园内大部分场所支持移动支付，建议准备少量现金</div>
+            </div>
+            <div class="tip-item" style="color: #f44336;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>樱花季期间游客众多，请注意人身财产安全，爱护樱花，文明游览</div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-phone"></i> 重要联系方式
+        </div>
+        <div class="emergency">
+            <div class="emergency-item">
+                <i class="fas fa-ambulance"></i>
+                <div>校医院急诊: 027-68778120</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>校园保卫处: 027-68778110</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-info-circle"></i>
+                <div>游客服务中心: 027-68756583</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-hospital"></i>
+                <div>就近医院: 湖北省人民医院 027-88041911</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div style="margin-bottom: 10px;">
+                <span style="display: inline-block; margin: 0 5px;"><i class="fas fa-seedling" style="color: #e91e63;"></i></span>
+                <span style="display: inline-block; margin: 0 5px;"><i class="fas fa-university" style="color: #0078d7;"></i></span>
+                <span style="display: inline-block; margin: 0 5px;"><i class="fas fa-seedling" style="color: #e91e63;"></i></span>
+            </div>
+            © 2025 武汉大学精华一日游行程规划表 | 打印日期: 2025/4/2
+        </div>
+    </div>
+    
+    <button class="print-btn" onclick="window.print()">
+        <i class="fas fa-print"></i> 打印行程
+    </button>
+</body>
+</html> 

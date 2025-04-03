@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>武汉精华一日游</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 10mm;
+                font-size: 12px;
+            }
+        }
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 1.4;
+        }
+        .container {
+            max-width: 210mm;
+            padding: 10mm;
+            margin: 0 auto;
+            background-color: #fff;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #0078d7;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .title {
+            color: #0078d7;
+            font-size: 24px;
+            font-weight: bold;
+            margin: 0;
+        }
+        .weather-box {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: right;
+            width: 200px;
+        }
+        .section-header {
+            background-color: #fff;
+            padding: 8px 15px;
+            margin: 15px 0 10px 0;
+            border-left: 4px solid #ff9800;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .section-header i {
+            margin-right: 8px;
+            color: #ff9800;
+        }
+        .overview {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+        .overview-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        .dot.morning {
+            background-color: #ffb300;
+        }
+        .dot.noon {
+            background-color: #f44336;
+        }
+        .dot.afternoon {
+            background-color: #4caf50;
+        }
+        .dot.evening {
+            background-color: #2196f3;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .schedule-table th {
+            background-color: #2c98df;
+            color: white;
+            text-align: center;
+            padding: 8px;
+        }
+        .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+        }
+        .schedule-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .schedule-time {
+            white-space: nowrap;
+            text-align: center;
+        }
+        .schedule-icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            margin-right: 5px;
+            color: #7b1fa2;
+        }
+        .transportation {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .route {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .route::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ff9800;
+        }
+        .route-arrow {
+            color: #ff9800;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        .route-detail {
+            color: #666;
+            margin-left: 5px;
+        }
+        .two-column {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .column {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            padding: 10px;
+        }
+        .info-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .info-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .info-list i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #0078d7;
+        }
+        .practical-tips {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .tip-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .tip-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #ff9800;
+        }
+        .emergency {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .emergency-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .emergency-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #f44336;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background-color: #005a9e;
+        }
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">武汉精华一日游</h1>
+            <div class="weather-box">
+                <div><i class="fas fa-cloud"></i> 天气: 多云</div>
+                <div>温度: 24°C/9°C</div>
+                <div>风向: 北风1-3级</div>
+            </div>
+        </div>
+        
+        <div>日期: 2025年4月5日（星期六）</div>
+        
+        <div class="section-header">
+            <i class="fas fa-cloud-sun"></i> 天气播报
+        </div>
+        <div class="two-column" style="margin-bottom: 15px;">
+            <div class="column" style="display: flex; align-items: center; justify-content: space-around; padding: 15px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 36px; color: #0078d7; margin-bottom: 5px;">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div style="font-weight: bold;">今日</div>
+                    <div>多云</div>
+                    <div><span style="color: #dc3545;">24°C</span> / <span style="color: #0d6efd;">9°C</span></div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; color: #777;">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div>北风</div>
+                    <div>1-3级</div>
+                </div>
+                <div style="border-left: 1px dashed #ddd; height: 80px; margin: 0 15px;"></div>
+                <div>
+                    <div style="margin-bottom: 8px;"><i class="fas fa-umbrella" style="color: #0078d7; margin-right: 5px;"></i> 降水概率: 10%</div>
+                    <div style="margin-bottom: 8px;"><i class="fas fa-sun" style="color: #ff9800; margin-right: 5px;"></i> 紫外线: 中等</div>
+                    <div><i class="fas fa-thermometer-half" style="color: #4caf50; margin-right: 5px;"></i> 体感温度: 22°C</div>
+                </div>
+            </div>
+            <div class="column">
+                <div style="margin-bottom: 10px; font-weight: bold;"><i class="fas fa-info-circle" style="color: #0078d7; margin-right: 5px;"></i> 天气提示</div>
+                <div style="line-height: 1.5; color: #555;">
+                    今日天气宜人，但昼夜温差较大，请适当增减衣物。春季武汉空气中含花粉较多，过敏体质者请做好防护。下午南湖、东湖一带可能有短时阵风，户外活动需注意安全。
+                </div>
+                <div style="margin-top: 10px;">
+                    <span class="badge bg-info me-2" style="padding: 5px 8px; margin-right: 5px;">携带外套</span>
+                    <span class="badge bg-warning me-2" style="padding: 5px 8px; margin-right: 5px;">防晒防护</span>
+                    <span class="badge bg-success" style="padding: 5px 8px;">适合户外</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-route"></i> 行程概览
+        </div>
+        <div class="overview">
+            <div class="overview-item">
+                <span class="dot morning"></span>
+                <span>上午: 黄鹤楼 — 登楼远眺长江美景</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot noon"></span>
+                <span>中午: 户部巷 — 品尝武汉特色小吃</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot afternoon"></span>
+                <span>下午: 东湖风景区 — 感受"楚韵汉风"</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot evening"></span>
+                <span>晚上: 江汉路步行街 — 体验武汉夜生活</span>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-clock"></i> 详细时间表
+        </div>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th width="15%">时间</th>
+                    <th width="25%">活动</th>
+                    <th width="25%">地点</th>
+                    <th width="35%">详情</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-monument schedule-icon"></i> 08:30-10:30</td>
+                    <td>游览黄鹤楼</td>
+                    <td>蛇山西山坡特1号</td>
+                    <td>
+                        门票: 80元<br>
+                        推荐: 登楼远眺、诗词浮雕墙
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-utensils schedule-icon"></i> 11:00-13:00</td>
+                    <td>品尝武汉小吃</td>
+                    <td>户部巷小吃街</td>
+                    <td>
+                        人均: 50-100元<br>
+                        推荐: 热干面、小龙虾、三鲜豆皮
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-tree schedule-icon"></i> 13:30-16:30</td>
+                    <td>游览东湖风景区</td>
+                    <td>东湖生态旅游风景区</td>
+                    <td>
+                        门票: 免费(部分景点收费)<br>
+                        推荐: 磨山景区、樱花园
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-water schedule-icon"></i> 17:00-18:30</td>
+                    <td>长江大桥观景</td>
+                    <td>武汉长江大桥附近</td>
+                    <td>
+                        门票: 免费<br>
+                        推荐: 沿江大道漫步、拍摄日落
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-moon schedule-icon"></i> 19:00-21:00</td>
+                    <td>夜游江汉路</td>
+                    <td>江汉路步行街</td>
+                    <td>
+                        门票: 免费<br>
+                        推荐: 百年建筑、各类美食、特色商店
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="section-header">
+            <i class="fas fa-car"></i> 交通信息
+        </div>
+        <div class="transportation">
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 黄鹤楼 <span class="route-arrow">→</span> 户部巷
+                <span class="route-detail">650米 | 约10分钟步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 户部巷 <span class="route-arrow">→</span> 东湖风景区
+                <span class="route-detail">25.4公里 | 约69分钟驾车</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 东湖 <span class="route-arrow">→</span> 长江大桥
+                <span class="route-detail">12公里 | 约30分钟驾车</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 长江大桥 <span class="route-arrow">→</span> 江汉路
+                <span class="route-detail">5公里 | 约15分钟驾车</span>
+            </div>
+            <div class="route" style="color: #666;">
+                <i class="fas fa-info-circle"></i> 交通方式: 市区内可乘坐地铁，景点间可打车或乘坐公交。地铁2号线贯穿多个景点。
+            </div>
+        </div>
+        
+        <div class="two-column">
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-subway"></i> 地铁路线
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-train"></i>
+                        <div>
+                            <strong>黄鹤楼 → 东湖:</strong><br>
+                            地铁4号线(黄鹤楼站→洪山广场站)<br>
+                            换乘地铁2号线(洪山广场站→光谷广场站)
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-train"></i>
+                        <div>
+                            <strong>东湖 → 江汉路:</strong><br>
+                            地铁2号线(光谷广场站→江汉路站)
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-info-circle"></i>
+                        <div>
+                            武汉地铁一日票: 20元<br>
+                            运营时间: 6:00-22:30
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-utensils"></i> 特色美食
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-hamburger"></i>
+                        <div>
+                            <strong>户部巷:</strong> 蔡林记热干面<br>
+                            热干面、三鲜豆皮、武昌鱼
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-fish"></i>
+                        <div>
+                            <strong>江汉路:</strong> 老通城豆皮<br>
+                            豆皮、小龙虾、鸭脖
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-utensils"></i>
+                        <div>
+                            <strong>东湖周边:</strong> 湖锦酒楼<br>
+                            武昌鱼、莲藕汤、排骨藕汤
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-exclamation-circle"></i> 实用提示
+        </div>
+        <div class="practical-tips">
+            <div class="tip-item">
+                <i class="fas fa-tshirt"></i>
+                <div>武汉春季昼夜温差大，建议带外套，当天温差17°C</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-walking"></i>
+                <div>黄鹤楼有较多台阶，建议穿舒适的鞋子</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-subway"></i>
+                <div>推荐购买武汉地铁一日票，省时省钱</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-money-bill"></i>
+                <div>行程总预算: 约300-500元/人（不含住宿）</div>
+            </div>
+            <div class="tip-item" style="color: #f44336;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>户部巷游客较多，请注意保管随身物品</div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-phone"></i> 重要联系方式
+        </div>
+        <div class="emergency">
+            <div class="emergency-item">
+                <i class="fas fa-ambulance"></i>
+                <div>急救中心: 120</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>报警中心: 110</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-info-circle"></i>
+                <div>旅游咨询: 027-12301</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-hospital"></i>
+                <div>黄鹤楼景区电话: 027-88875096</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-hospital"></i>
+                <div>东湖风景区电话: 027-86775893</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            © 2025 武汉精华一日游行程规划表 | 打印日期: 2025/4/2
+        </div>
+    </div>
+    
+    <button class="print-btn" onclick="window.print()">
+        <i class="fas fa-print"></i> 打印行程
+    </button>
+</body>
+</html> 
