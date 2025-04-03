@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>成都精华一日游</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 10mm;
+                font-size: 12px;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+        
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 1.4;
+            background-image: url('https://img.zcool.cn/community/0170aa5d4a3fe1a8012187f46a4e12.jpg@1280w_1l_2o_100sh.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        
+        .container {
+            max-width: 210mm;
+            padding: 10mm;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #E57373;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title {
+            color: #D32F2F;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #555;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .weather-box {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: right;
+            width: 200px;
+        }
+        
+        .section-header {
+            background-color: #fff;
+            padding: 8px 15px;
+            margin: 15px 0 10px 0;
+            border-left: 4px solid #E57373;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-header i {
+            margin-right: 8px;
+            color: #D32F2F;
+        }
+        
+        .overview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .overview-box {
+            flex: 1;
+            min-width: 200px;
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            border-top: 3px solid #E57373;
+        }
+        
+        .overview-box h3 {
+            margin-top: 0;
+            color: #D32F2F;
+            font-size: 18px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #E57373;
+        }
+        
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        
+        .schedule-table th {
+            background-color: #E57373;
+            color: white;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+        }
+        
+        .schedule-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        
+        .schedule-time {
+            white-space: nowrap;
+            text-align: center;
+        }
+        
+        .schedule-icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            margin-right: 5px;
+            color: #D32F2F;
+        }
+        
+        .transportation {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        
+        .route {
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .route::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #E57373;
+        }
+        
+        .route-arrow {
+            color: #E57373;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        
+        .route-detail {
+            color: #666;
+            margin-left: 5px;
+        }
+        
+        .two-column {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .column {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            padding: 10px;
+        }
+        
+        .info-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        
+        .info-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .info-list i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #D32F2F;
+        }
+        
+        .practical-tips {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        
+        .tip-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .tip-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #D32F2F;
+        }
+        
+        .emergency {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            background-color: #FFF3F3;
+        }
+        
+        .emergency-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .emergency-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #D32F2F;
+        }
+        
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #E57373;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        
+        .print-btn:hover {
+            background-color: #D32F2F;
+        }
+        
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+        
+        .highlight-text {
+            color: #D32F2F;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1 class="title">成都精华一日游</h1>
+                <p class="subtitle">领略蓉城魅力，体验巴蜀文化</p>
+            </div>
+            <div class="weather-box">
+                <div><i class="fas fa-cloud-rain"></i> 天气: 多云转小雨</div>
+                <div>温度: 22°C/13°C</div>
+                <div>风向: 北风1-3级</div>
+            </div>
+        </div>
+        
+        <div>日期: 2025年4月5日（星期六）</div>
+        
+        <!-- 添加文字装饰 -->
+        <div style="text-align: center; margin: 15px 0; padding: 10px; background-color: rgba(229, 115, 115, 0.1); border-radius: 5px; border-left: 3px solid #E57373;">
+            <p style="margin: 0; font-style: italic; color: #D32F2F;">
+                <i class="fas fa-pepper-hot" style="margin-right: 8px;"></i>
+                蓉城悠闲慢生活，熊猫国宝锦里情 - 一日尽享成都精华魅力
+                <i class="fas fa-mug-hot" style="margin-left: 8px;"></i>
+            </p>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-route"></i> 行程概览
+        </div>
+        <div class="overview">
+            <div class="overview-box">
+                <h3>上午</h3>
+                <p><i class="fas fa-paw"></i> 08:30-12:00</p>
+                <p>成都大熊猫繁育研究基地</p>
+                <p>· 观赏国宝大熊猫</p>
+                <p>· 了解熊猫保护知识</p>
+                <p>· 参观熊猫博物馆</p>
+            </div>
+            <div class="overview-box">
+                <h3>中午</h3>
+                <p><i class="fas fa-utensils"></i> 12:30-14:00</p>
+                <p>锦里古街用餐</p>
+                <p>· 品尝成都特色美食</p>
+                <p>· 体验巴蜀小吃文化</p>
+            </div>
+            <div class="overview-box">
+                <h3>下午</h3>
+                <p><i class="fas fa-landmark"></i> 14:00-16:00</p>
+                <p>武侯祠&锦里古街</p>
+                <p>· 参观三国遗址</p>
+                <p>· 体验古蜀文化</p>
+                <p><i class="fas fa-street-view"></i> 16:30-18:30</p>
+                <p>宽窄巷子</p>
+                <p>· 感受老成都风貌</p>
+                <p>· 品尝特色小吃</p>
+            </div>
+            <div class="overview-box">
+                <h3>晚上</h3>
+                <p><i class="fas fa-water"></i> 19:00-21:00</p>
+                <p>锦江夜游(可选)</p>
+                <p>· 欣赏成都夜景</p>
+                <p>· 体验夜间水上活动</p>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-clock"></i> 详细时间表
+        </div>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th width="15%">时间</th>
+                    <th width="20%">活动</th>
+                    <th width="25%">地点</th>
+                    <th width="40%">详情</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-paw schedule-icon"></i> 08:30-12:00</td>
+                    <td>参观大熊猫基地</td>
+                    <td>成都大熊猫繁育研究基地<br>（熊猫大道1375号）</td>
+                    <td>
+                        门票: 58元/人<br>
+                        开放时间: 07:30-18:00(3-10月)<br>
+                        08:00-17:30(11-2月)<br>
+                        最佳游览时间: 上午8:30-10:30<br>
+                        (熊猫活动最活跃)<br>
+                        备注: 可租借讲解器了解熊猫知识
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-utensils schedule-icon"></i> 12:30-14:00</td>
+                    <td>午餐</td>
+                    <td>锦里古街</td>
+                    <td>
+                        特色美食: 担担面、龙抄手、钟水饺、赖汤圆等<br>
+                        推荐餐厅: 鸡毛店•川菜、老妈蹄花、龙抄手等<br>
+                        预算: 50-80元/人
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-landmark schedule-icon"></i> 14:00-16:00</td>
+                    <td>参观武侯祠及锦里古街</td>
+                    <td>武侯祠博物馆<br>锦里古街<br>（武侯祠大街231号附1号）</td>
+                    <td>
+                        门票: 武侯祠50元/人<br>
+                        锦里古街免费<br>
+                        开放时间: 24小时(商家09:00-22:00)<br>
+                        亮点: 三国文化、古蜀建筑、民俗表演、手工艺品
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-street-view schedule-icon"></i> 16:30-18:30</td>
+                    <td>游览宽窄巷子</td>
+                    <td>宽窄巷子<br>（金河路口宽窄巷子）</td>
+                    <td>
+                        门票: 免费<br>
+                        开放时间: 24小时<br>
+                        亮点: 清代四合院建筑、手工艺品、特色茶馆、地道小吃
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-water schedule-icon"></i> 19:00-21:00</td>
+                    <td>锦江夜游(可选)</td>
+                    <td>锦江</td>
+                    <td>
+                        船票: 约70元/人<br>
+                        亮点: 夜景、灯光秀、水上活动<br>
+                        备注: 需提前预约
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="section-header">
+            <i class="fas fa-car"></i> 交通路线
+        </div>
+        <div class="transportation">
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 熊猫基地 <span class="route-arrow">→</span> 锦里古街
+                <span class="route-detail">乘坐熊猫基地直通车5号线到武侯祠站，步行约300米</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 另一选择
+                <span class="route-detail">从熊猫基地步行至熊猫大道站，乘坐地铁3号线至高升桥站，步行约15分钟</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 锦里古街 <span class="route-arrow">→</span> 宽窄巷子
+                <span class="route-detail">从武侯祠(锦里)站乘坐锦城观光线到金河路站，步行约500米</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 另一选择
+                <span class="route-detail">步行至高升桥站，乘坐地铁5号线至中医大·省医院站，换乘地铁4号线至宽窄巷子站</span>
+            </div>
+            <div class="route" style="color: #666;">
+                <i class="fas fa-info-circle"></i> 交通提示: 成都公共交通便利，也可使用共享单车或打车出行。
+            </div>
+        </div>
+        
+        <div class="two-column">
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-camera"></i> 摄影打卡点
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>熊猫基地:</strong><br>
+                            最佳拍摄点: 月亮产房外、竹林区<br>
+                            最佳拍摄时间: 上午9:30前
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>锦里古街:</strong><br>
+                            最佳拍摄点: 古街灯笼区、传统工艺铺<br>
+                            最佳拍摄时间: 傍晚时分
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>宽窄巷子:</strong><br>
+                            最佳拍摄点: 老式四合院、青石板街道<br>
+                            最佳拍摄时间: 阳光充足时
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-utensils"></i> 美食推荐
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-pepper-hot"></i>
+                        <div>
+                            <strong>小吃类:</strong><br>
+                            龙抄手(18元)、钟水饺(15元)、担担面(20元)<br>
+                            三大炮(10元)、赖汤圆(12元)
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-utensils"></i>
+                        <div>
+                            <strong>正餐:</strong><br>
+                            川西坝子火锅(人均80-100元)<br>
+                            鸡毛店•川菜(人均60-80元)
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-mug-hot"></i>
+                        <div>
+                            <strong>特色茶饮:</strong><br>
+                            盖碗茶(25元)、冰粉(8元)、糖油果子(10元)
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-exclamation-circle"></i> 实用提示
+        </div>
+        <div class="practical-tips">
+            <div class="tip-item">
+                <i class="fas fa-calendar-alt"></i>
+                <div>最佳游览季节: 3-5月、9-11月，气候宜人，景色优美</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-tshirt"></i>
+                <div>着装建议: 舒适运动鞋，轻便服装，备一件外套防雨</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-bus"></i>
+                <div>交通方式: 市内公共交通发达，建议使用地铁、公交或共享单车</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-paw"></i>
+                <div>熊猫基地: 早上8:30前到达，可以看到熊猫最活跃的时段</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-money-bill"></i>
+                <div>消费水平: 一日游人均消费约300-500元(含餐饮、门票、交通)</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-mobile-alt"></i>
+                <div>支付方式: 大部分商家支持移动支付，少量小摊贩可能只收现金</div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-phone"></i> 紧急联系方式
+        </div>
+        <div class="emergency">
+            <div class="emergency-item">
+                <i class="fas fa-ambulance"></i>
+                <div>急救电话: 120</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>报警电话: 110</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-fire-extinguisher"></i>
+                <div>消防电话: 119</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-hospital"></i>
+                <div>医院: 四川省人民医院(成都市一环路西二段32号)</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-info-circle"></i>
+                <div>旅游咨询: 成都市旅游咨询中心 028-12301</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            © 2025 成都精华一日游行程规划表 | 数据来源: 高德地图 | 打印日期: 2025/4/2
+        </div>
+    </div>
+    
+    <button class="print-btn" onclick="window.print()">
+        <i class="fas fa-print"></i> 打印行程
+    </button>
+</body>
+</html> 

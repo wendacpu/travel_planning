@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>华中科技大学精华一日游</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+            }
+            body {
+                width: 210mm;
+                height: 297mm;
+                margin: 0;
+                padding: 10mm;
+                font-size: 12px;
+            }
+        }
+        body {
+            font-family: 'Arial', 'Microsoft YaHei', sans-serif;
+            color: #333;
+            line-height: 1.4;
+            background-image: url('https://pic1.zhimg.com/80/v2-03e44ed32d9c0c2aaaab48f88f0b2c8c_720w.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+        }
+        .container {
+            max-width: 210mm;
+            padding: 10mm;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.92);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        /* 添加装饰元素 */
+        .container::before,
+        .container::after {
+            content: '';
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            background-image: url('https://pic2.zhimg.com/80/v2-e36363af2df39b04c5a32429d9e4244f_720w.jpg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 0;
+            opacity: 0.1;
+        }
+        .container::before {
+            top: -20px;
+            right: -20px;
+            transform: rotate(45deg);
+        }
+        .container::after {
+            bottom: -20px;
+            left: -20px;
+            transform: rotate(-45deg);
+        }
+        .hust-decoration {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        .deco-1 {
+            top: 50px;
+            right: 50px;
+            width: 200px;
+            transform: rotate(10deg);
+        }
+        .deco-2 {
+            bottom: 100px;
+            left: 30px;
+            width: 150px;
+            transform: rotate(-8deg);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #1565C0;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+        }
+        .title {
+            color: #1565C0;
+            font-size: 28px;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+        }
+        .weather-box {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: right;
+            width: 200px;
+        }
+        .section-header {
+            background-color: #fff;
+            padding: 8px 15px;
+            margin: 15px 0 10px 0;
+            border-left: 4px solid #1565C0;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+        .section-header i {
+            margin-right: 8px;
+            color: #1565C0;
+        }
+        .overview {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 15px;
+        }
+        .overview-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .dot {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            margin-right: 10px;
+            margin-top: 3px;
+        }
+        .dot.morning {
+            background-color: #2196F3;
+        }
+        .dot.noon {
+            background-color: #FFC107;
+        }
+        .dot.afternoon {
+            background-color: #4CAF50;
+        }
+        .dot.evening {
+            background-color: #9C27B0;
+        }
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+        .schedule-table th {
+            background-color: #1565C0;
+            color: white;
+            text-align: center;
+            padding: 8px;
+        }
+        .schedule-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            vertical-align: top;
+        }
+        .schedule-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .schedule-time {
+            white-space: nowrap;
+            text-align: center;
+        }
+        .schedule-icon {
+            display: inline-block;
+            width: 20px;
+            text-align: center;
+            margin-right: 5px;
+            color: #1565C0;
+        }
+        .transportation {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .route {
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+        .route::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #1565C0;
+        }
+        .route-arrow {
+            color: #1565C0;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+        .route-detail {
+            color: #666;
+            margin-left: 5px;
+        }
+        .two-column {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .column {
+            flex: 1;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+            padding: 10px;
+        }
+        .info-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+        .info-list li {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .info-list i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #1565C0;
+        }
+        .practical-tips {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .tip-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .tip-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #1565C0;
+        }
+        .emergency {
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 3px;
+        }
+        .emergency-item {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .emergency-item i {
+            width: 20px;
+            text-align: center;
+            margin-right: 10px;
+            color: #1565C0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #777;
+            margin-top: 20px;
+            padding-top: 10px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .print-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #1565C0;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 15px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .print-btn:hover {
+            background-color: #0D47A1;
+        }
+        @media print {
+            .print-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 添加装饰元素 -->
+        <img src="https://pic1.zhimg.com/80/v2-e36363af2df39b04c5a32429d9e4244f_720w.jpg" class="hust-decoration deco-1">
+        <img src="https://pic2.zhimg.com/80/v2-3ca94c44fc0c42e6d667c74fdd1df05a_720w.jpg" class="hust-decoration deco-2">
+        
+        <div class="header">
+            <h1 class="title">华中科技大学精华一日游</h1>
+            <div class="weather-box">
+                <div><i class="fas fa-cloud"></i> 天气: 多云转阴</div>
+                <div>温度: 24°C/8°C</div>
+                <div>风向: 北风1-3级</div>
+            </div>
+        </div>
+        
+        <div>日期: 2025年4月5日（星期六）</div>
+        
+        <!-- 添加文字装饰 -->
+        <div style="text-align: center; margin: 15px 0; padding: 10px; background-color: rgba(21, 101, 192, 0.1); border-radius: 5px; border-left: 3px solid #1565C0;">
+            <p style="margin: 0; font-style: italic; color: #1565C0;">
+                <i class="fas fa-university" style="margin-right: 8px;"></i>
+                科技改变未来，创新引领发展 - 探索华中科技大学的科技与人文魅力
+                <i class="fas fa-atom" style="margin-left: 8px;"></i>
+            </p>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-cloud-sun"></i> 天气播报
+        </div>
+        <div class="two-column" style="margin-bottom: 15px;">
+            <div class="column" style="display: flex; align-items: center; justify-content: space-around; padding: 15px;">
+                <div style="text-align: center;">
+                    <div style="font-size: 36px; color: #1565C0; margin-bottom: 5px;">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <div style="font-weight: bold;">今日</div>
+                    <div>多云转阴</div>
+                    <div><span style="color: #dc3545;">24°C</span> / <span style="color: #0d6efd;">8°C</span></div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="font-size: 24px; color: #777;">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <div>北风</div>
+                    <div>1-3级</div>
+                </div>
+                <div style="border-left: 1px dashed #ddd; height: 80px; margin: 0 15px;"></div>
+                <div>
+                    <div style="margin-bottom: 8px;"><i class="fas fa-umbrella" style="color: #3498db; margin-right: 5px;"></i> 降水概率: 10%</div>
+                    <div style="margin-bottom: 8px;"><i class="fas fa-sun" style="color: #f39c12; margin-right: 5px;"></i> 紫外线: 中等</div>
+                    <div><i class="fas fa-thermometer-half" style="color: #2ecc71; margin-right: 5px;"></i> 体感温度: 22°C</div>
+                </div>
+            </div>
+            <div class="column">
+                <div style="margin-bottom: 10px; font-weight: bold;"><i class="fas fa-info-circle" style="color: #1565C0; margin-right: 5px;"></i> 天气提示</div>
+                <div style="line-height: 1.5; color: #555;">
+                    今日武汉天气多云转阴，气温适宜，早晚温差较大。游览华中科技大学校园建议携带轻薄外套。校园内大部分景点为室外，建议做好防晒措施，午后游览光谷广场时可能气温较高，请做好防暑准备。
+                </div>
+                <div style="margin-top: 10px;">
+                    <span class="badge bg-info me-2" style="padding: 5px 8px; margin-right: 5px;">携带外套</span>
+                    <span class="badge bg-warning me-2" style="padding: 5px 8px; margin-right: 5px;">注意防晒</span>
+                    <span class="badge bg-success" style="padding: 5px 8px;">适合游览</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-route"></i> 行程概览
+        </div>
+        <div class="overview">
+            <div class="overview-item">
+                <span class="dot morning"></span>
+                <span>上午: 华科主校区 — 图书馆、主楼广场、校史馆</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot noon"></span>
+                <span>中午: 韵苑食堂 — 品尝校园美食</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot afternoon"></span>
+                <span>下午: 建筑学院、光电子信息学院、东湖风景区</span>
+            </div>
+            <div class="overview-item">
+                <span class="dot evening"></span>
+                <span>晚上: 光谷步行街 — 感受科技新城魅力</span>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-clock"></i> 详细时间表
+        </div>
+        <table class="schedule-table">
+            <thead>
+                <tr>
+                    <th width="15%">时间</th>
+                    <th width="25%">活动</th>
+                    <th width="25%">地点</th>
+                    <th width="35%">详情</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-landmark schedule-icon"></i> 09:00-10:30</td>
+                    <td>参观校史馆、图书馆</td>
+                    <td>华中科技大学图书馆、校史馆</td>
+                    <td>
+                        门票: 免费<br>
+                        备注: 校史馆需提前预约参观<br>
+                        亮点: 了解华科发展历史，欣赏现代化图书馆建筑
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-university schedule-icon"></i> 10:30-12:00</td>
+                    <td>主楼广场、校园步道</td>
+                    <td>华中科技大学主楼、东区校园</td>
+                    <td>
+                        门票: 免费<br>
+                        亮点: 华科标志性建筑，校园美景<br>
+                        推荐: 主楼前合影留念，校园林荫道漫步
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-utensils schedule-icon"></i> 12:00-13:30</td>
+                    <td>校园美食</td>
+                    <td>韵苑食堂、东篱餐吧</td>
+                    <td>
+                        人均: 20-30元<br>
+                        推荐: 韵苑食堂的卤肉饭、东篱餐吧的特色小吃<br>
+                        备注: 午餐时间人流量大，建议错峰就餐
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-drafting-compass schedule-icon"></i> 13:30-15:00</td>
+                    <td>参观特色学院</td>
+                    <td>建筑与城市规划学院、光电子信息学院</td>
+                    <td>
+                        门票: 免费<br>
+                        亮点: 建筑学院的设计展厅、光电学院的科技展示<br>
+                        备注: 部分实验室需提前预约参观
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-tree schedule-icon"></i> 15:30-17:30</td>
+                    <td>东湖风景区</td>
+                    <td>东湖绿道、湖滨区域</td>
+                    <td>
+                        门票: 免费<br>
+                        亮点: 湖光山色、学子风采<br>
+                        备注: 距离华科校区较近，步行可达
+                    </td>
+                </tr>
+                <tr>
+                    <td class="schedule-time"><i class="fas fa-shopping-bag schedule-icon"></i> 18:00-20:30</td>
+                    <td>光谷步行街</td>
+                    <td>光谷广场、光谷步行街</td>
+                    <td>
+                        门票: 免费<br>
+                        亮点: 武汉科技新城夜景、特色餐饮、购物<br>
+                        推荐: 光谷广场音乐喷泉、特色小吃一条街
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <div class="section-header">
+            <i class="fas fa-car"></i> 交通路线
+        </div>
+        <div class="transportation">
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 武汉市区 <span class="route-arrow">→</span> 华中科技大学
+                <span class="route-detail">乘坐地铁2号线到光谷广场站，转乘公交车或步行</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 校内交通
+                <span class="route-detail">华中科技大学校区面积大，校内有免费观光车，站点分布在主要教学区和生活区</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 华中科技大学 <span class="route-arrow">→</span> 东湖风景区
+                <span class="route-detail">步行约15分钟或乘坐校园观光车到东校区南门，步行前往东湖</span>
+            </div>
+            <div class="route">
+                <i class="fas fa-map-marker-alt"></i> 东湖风景区 <span class="route-arrow">→</span> 光谷步行街
+                <span class="route-detail">乘坐公交车401路、413路等到光谷广场站</span>
+            </div>
+            <div class="route" style="color: #666;">
+                <i class="fas fa-info-circle"></i> 交通提示: 华科校区周边交通便利，但校园面积较大，建议提前规划行程路线，合理安排游览时间。
+            </div>
+        </div>
+        
+        <div class="two-column">
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-camera"></i> 摄影打卡点
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>主楼广场:</strong><br>
+                            最佳拍摄点: 主楼前方广场中央<br>
+                            最佳拍摄时间: 上午光线柔和时
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>图书馆外观:</strong><br>
+                            最佳拍摄点: 图书馆前方广场<br>
+                            最佳拍摄时间: 下午2-4点光线明亮时
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <strong>东湖绿道:</strong><br>
+                            最佳拍摄点: 湖边栈道<br>
+                            最佳拍摄时间: 傍晚日落前
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="column">
+                <div class="section-header" style="margin-top: 0;">
+                    <i class="fas fa-utensils"></i> 美食推荐
+                </div>
+                <ul class="info-list">
+                    <li>
+                        <i class="fas fa-pepper-hot"></i>
+                        <div>
+                            <strong>韵苑食堂:</strong><br>
+                            招牌卤肉饭、麻辣香锅、酸菜鱼<br>
+                            价格: 15-25元/份
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-fish"></i>
+                        <div>
+                            <strong>东篱餐吧:</strong><br>
+                            特色小吃、奶茶饮品<br>
+                            价格: 10-20元/份
+                        </div>
+                    </li>
+                    <li>
+                        <i class="fas fa-drumstick-bite"></i>
+                        <div>
+                            <strong>光谷步行街美食:</strong><br>
+                            热干面、鸭脖、小龙虾<br>
+                            价格: 20-50元/份
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-exclamation-circle"></i> 实用提示
+        </div>
+        <div class="practical-tips">
+            <div class="tip-item">
+                <i class="fas fa-id-card"></i>
+                <div>校园参观需携带有效证件，部分区域需在校门口登记</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-walking"></i>
+                <div>华科校园面积大，建议穿舒适的鞋子，准备充足的水和零食</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-wifi"></i>
+                <div>校园内有免费WiFi"HUST-STUDENT"，但需要校内账号登录</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-map-marked-alt"></i>
+                <div>校园内道路纵横交错，建议使用高德地图"校园地图"功能导航</div>
+            </div>
+            <div class="tip-item">
+                <i class="fas fa-money-bill"></i>
+                <div>校内消费普遍支持移动支付，少量现金即可，食堂用餐高峰期可使用校园APP点餐</div>
+            </div>
+            <div class="tip-item" style="color: #1565C0;">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>校园内部分实验室、特殊场所禁止拍照，请遵守相关规定</div>
+            </div>
+        </div>
+        
+        <div class="section-header">
+            <i class="fas fa-phone"></i> 重要联系方式
+        </div>
+        <div class="emergency">
+            <div class="emergency-item">
+                <i class="fas fa-ambulance"></i>
+                <div>急救电话: 120</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-shield-alt"></i>
+                <div>报警电话: 110</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-info-circle"></i>
+                <div>华科校园安保: 027-87542377</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-hospital"></i>
+                <div>华中科技大学同济医学院附属同济医院: 027-83662688</div>
+            </div>
+            <div class="emergency-item">
+                <i class="fas fa-bus"></i>
+                <div>校园观光车服务: 027-87543210</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            © 2025 华中科技大学精华一日游行程规划表 | 数据来源: 高德地图 | 打印日期: 2025/4/2
+        </div>
+    </div>
+    
+    <button class="print-btn" onclick="window.print()">
+        <i class="fas fa-print"></i> 打印行程
+    </button>
+</body>
+</html> 
